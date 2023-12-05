@@ -1,7 +1,6 @@
 package com.lin.loj.model.vo;
 
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.lin.loj.model.dto.question.JudgeConfig;
 import com.lin.loj.model.entity.Question;
 import lombok.Data;
@@ -64,9 +63,6 @@ public class QuestionVO implements Serializable {
      */
     private Integer favourNum;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
-
     /**
      * 包装类转对象
      *
@@ -106,4 +102,6 @@ public class QuestionVO implements Serializable {
         questionVO.setJudgeConfig(JSONUtil.toBean(question.getJudgeConfig(), JudgeConfig.class));
         return questionVO;
     }
+
+    private static final long serialVersionUID = 1L;
 }

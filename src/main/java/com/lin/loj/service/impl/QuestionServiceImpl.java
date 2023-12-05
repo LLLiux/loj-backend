@@ -119,10 +119,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             return questionVOPage;
         }
         // 填充信息
-        List<QuestionVO> questionVOList = questionList.stream().map(question -> {
-            QuestionVO questionVO = QuestionVO.objToVo(question);
-            return questionVO;
-        }).collect(Collectors.toList());
+        List<QuestionVO> questionVOList = questionList.stream()
+                .map(question -> getQuestionVO(question, request))
+                .collect(Collectors.toList());
         questionVOPage.setRecords(questionVOList);
         return questionVOPage;
     }

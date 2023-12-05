@@ -1,13 +1,18 @@
 package com.lin.loj.controller;
 
-import com.lin.loj.model.entity.User;
-import com.lin.loj.service.QuestionSubmitService;
-import com.lin.loj.service.UserService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lin.loj.common.BaseResponse;
 import com.lin.loj.common.ErrorCode;
 import com.lin.loj.common.ResultUtils;
 import com.lin.loj.exception.BusinessException;
+import com.lin.loj.exception.ThrowUtils;
 import com.lin.loj.model.dto.questionSubmit.QuestionSubmitAddRequest;
+import com.lin.loj.model.dto.questionSubmit.QuestionSubmitQueryRequest;
+import com.lin.loj.model.entity.QuestionSubmit;
+import com.lin.loj.model.entity.User;
+import com.lin.loj.model.vo.QuestionSubmitVO;
+import com.lin.loj.service.QuestionSubmitService;
+import com.lin.loj.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,7 +47,7 @@ public class QuestionSubmitController {
      */
     @PostMapping("/")
     public BaseResponse<Long> doQuestionSubmit(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest,
-            HttpServletRequest request) {
+                                               HttpServletRequest request) {
         if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -50,5 +55,18 @@ public class QuestionSubmitController {
         final User loginUser = userService.getLoginUser(request);
         long result = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
         return ResultUtils.success(result);
+    }
+
+    @PostMapping("list/page/vo")
+    public BaseResponse<Page<QuestionSubmitVO>> listQuestionSubmitVOByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest,
+                                                                           HttpServletRequest request) {
+        long current = questionSubmitQueryRequest.getCurrent();
+        long size = questionSubmitQueryRequest.getPageSize();
+        // 限制爬虫
+        ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
+        Page<QuestionSubmit> questionSubmitPage = questionSubmitService.page(new Page<>(current, size),
+                questionSubmitService.getQueryWrapper(questionSubmitQueryRequest));
+        final User loginUser = userService.getLoginUser(request);
+        return ResultUtils.success(questionSubmitService.getQuestionSubmitVOPage(questionSubmitPage, loginUser));
     }
 }

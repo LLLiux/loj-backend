@@ -1,11 +1,10 @@
 package com.lin.loj.model.vo;
 
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.google.gson.Gson;
-import com.lin.loj.model.entity.QuestionSubmit;
 import com.lin.loj.model.dto.questionSubmit.JudgeInfo;
+import com.lin.loj.model.entity.QuestionSubmit;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -65,14 +64,6 @@ public class QuestionSubmitVO implements Serializable {
     private Date createTime;
 
     /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
-
-    /**
      * 包装类转对象
      *
      * @param questionSubmitVO
@@ -106,4 +97,6 @@ public class QuestionSubmitVO implements Serializable {
         questionSubmitVO.setJudgeInfo(JSONUtil.toBean(questionSubmit.getJudgeInfo(), JudgeInfo.class));
         return questionSubmitVO;
     }
+
+    private static final long serialVersionUID = 1L;
 }

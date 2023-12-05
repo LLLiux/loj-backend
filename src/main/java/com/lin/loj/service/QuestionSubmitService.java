@@ -1,9 +1,13 @@
 package com.lin.loj.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lin.loj.model.dto.questionSubmit.QuestionSubmitAddRequest;
+import com.lin.loj.model.dto.questionSubmit.QuestionSubmitQueryRequest;
 import com.lin.loj.model.entity.QuestionSubmit;
 import com.lin.loj.model.entity.User;
+import com.lin.loj.model.vo.QuestionSubmitVO;
 
 /**
 * @author L
@@ -20,4 +24,10 @@ public interface QuestionSubmitService extends IService<QuestionSubmit> {
      * @return
      */
     long doQuestionSubmit(QuestionSubmitAddRequest questionSubmitAddRequest, User loginUser);
+
+    QueryWrapper<QuestionSubmit> getQueryWrapper(QuestionSubmitQueryRequest questionSubmitQueryRequest);
+
+    QuestionSubmitVO getQuestionSubmitVO(QuestionSubmit questionSubmit, User loginUser);
+
+    Page<QuestionSubmitVO> getQuestionSubmitVOPage(Page<QuestionSubmit> questionSubmitPage, User loginUser);
 }

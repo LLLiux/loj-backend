@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lin.loj.common.ErrorCode;
 import com.lin.loj.constant.CommonConstant;
 import com.lin.loj.exception.BusinessException;
+import com.lin.loj.judge.JudgeService;
 import com.lin.loj.mapper.QuestionSubmitMapper;
 import com.lin.loj.model.dto.questionSubmit.QuestionSubmitAddRequest;
 import com.lin.loj.model.dto.questionSubmit.QuestionSubmitQueryRequest;
@@ -21,10 +22,12 @@ import com.lin.loj.service.UserService;
 import com.lin.loj.utils.SqlUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -40,6 +43,10 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
 
     @Resource
     private UserService userService;
+
+    @Resource
+    @Lazy
+    private JudgeService judgeService;
 
     /**
      * 提交
@@ -77,7 +84,9 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
 
         Long questionSubmitId = questionSubmit.getId();
         // 判题
-
+        CompletableFuture.runAsync(()->{
+            judgeService.doJudge(questionSubmit);
+        });
         return questionSubmitId;
     }
 

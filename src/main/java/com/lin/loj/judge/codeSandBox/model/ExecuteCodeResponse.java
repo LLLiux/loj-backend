@@ -23,4 +23,9 @@ public class ExecuteCodeResponse {
      * 执行输出
      */
     private List<String> outputList;
+
+    /**
+     * 执行状态（0-正常 1-编译错误 2-执行错误 3-代码沙箱错误）
+     */
+    private Integer status;
 }

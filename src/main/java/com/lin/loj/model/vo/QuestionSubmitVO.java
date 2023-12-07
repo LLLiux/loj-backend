@@ -3,7 +3,7 @@ package com.lin.loj.model.vo;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.google.gson.Gson;
-import com.lin.loj.model.dto.questionSubmit.JudgeInfo;
+import com.lin.loj.judge.codeSandBox.model.JudgeInfo;
 import com.lin.loj.model.entity.QuestionSubmit;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;

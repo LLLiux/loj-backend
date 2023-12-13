@@ -1,6 +1,6 @@
 package com.lin.loj.judge.strategy;
 
-import com.lin.loj.judge.codeSandBox.model.JudgeInfo;
+import com.lin.loj.judge.codeSandBox.model.ExecuteCodeResponse;
 import com.lin.loj.model.dto.question.JudgeCase;
 import com.lin.loj.model.entity.Question;
 import com.lin.loj.model.entity.QuestionSubmit;
@@ -15,19 +15,9 @@ import java.util.List;
 @Data
 public class JudgeContext {
     /**
-     * 执行输出
-     */
-    List<String> outputList;
-
-    /**
      * 判题用例
      */
     List<JudgeCase> judgeCaseList;
-
-    /**
-     * 判题信息
-     */
-    JudgeInfo judgeInfo;
 
     /**
      * 题目
@@ -38,4 +28,9 @@ public class JudgeContext {
      * 题目提交
      */
     QuestionSubmit questionSubmit;
+
+    /**
+     * 代码执行结果
+     */
+    ExecuteCodeResponse executeCodeResponse;
 }

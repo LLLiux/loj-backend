@@ -45,12 +45,13 @@ public class JudgeServiceImpl implements JudgeService {
     public QuestionSubmit doJudge(QuestionSubmit questionSubmit) {
         Long questionSubmitId = questionSubmit.getId();
 
-        // 判断当前状态
+        // 1.判断当前状态
         Integer status = questionSubmit.getStatus();
         if (!status.equals(QuestionSubmitStatusEnum.WAITING.getValue())) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "判题中，请勿重复操作");
         }
-        // 更新数据库（题目状态）
+
+        // 2.更新数据库（题目状态）
         QuestionSubmit questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);
         questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.RUNNING.getValue());
@@ -58,6 +59,8 @@ public class JudgeServiceImpl implements JudgeService {
         if (!update) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "题目状态更新失败");
         }
+
+        // 3.调用代码沙箱执行代码
         // 获取输入用例
         Question question = questionService.getById(questionSubmit.getQuestionId());
         String judgeCaseListJson = question.getJudgeCase();
@@ -72,16 +75,18 @@ public class JudgeServiceImpl implements JudgeService {
         // 调用代码沙箱执行代码（工厂模式 + 代理模式）
         CodeSandBox codeSandBox = new CodeSandBoxProxy(CodeSandBoxFactory.newInstance(type));
         ExecuteCodeResponse executeCodeResponse = codeSandBox.executeCode(executeCodeRequest);
+
+        // 4.根据执行结果判题
         // 填充上下文 用于后续判题
         JudgeContext judgeContext = new JudgeContext();
-        judgeContext.setOutputList(executeCodeResponse.getOutputList());
         judgeContext.setJudgeCaseList(judgeCaseList);
-        judgeContext.setJudgeInfo(executeCodeResponse.getJudgeInfo());
         judgeContext.setQuestion(question);
         judgeContext.setQuestionSubmit(questionSubmit);
+        judgeContext.setExecuteCodeResponse(executeCodeResponse);
         // 判断执行结果
         JudgeInfo judgeInfo = judgeManager.doJudge(judgeContext);
-        // 更新数据库（题目状态 + 判题信息）
+
+        // 5.更新数据库（题目状态 + 判题信息）
         questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);
         questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.SUCCEED.getValue());

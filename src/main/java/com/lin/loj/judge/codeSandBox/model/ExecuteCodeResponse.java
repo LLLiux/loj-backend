@@ -15,9 +15,14 @@ public class ExecuteCodeResponse {
     private String message;
 
     /**
-     * 判题信息
+     * 时间开销（ms）
      */
-    private JudgeInfo judgeInfo;
+    private Long time;
+
+    /**
+     * 内存开销（kB）
+     */
+    private Long memory;
 
     /**
      * 执行输出

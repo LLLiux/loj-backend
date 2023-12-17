@@ -71,7 +71,7 @@ public class JavaJudgeStrategy implements JudgeStrategy {
             judgeInfo.setMessage(JudgeInfoMessageEnum.TIME_LIMIT_EXCEEDED.getValue());
             return judgeInfo;
         }
-        if (memory > judgeConfig.getMemoryLimit()) {
+        if (memory > judgeConfig.getMemoryLimit() * 1000 * 8) {
             judgeInfo.setMessage(JudgeInfoMessageEnum.MEMORY_LIMIT_EXCEEDED.getValue());
             return judgeInfo;
         }

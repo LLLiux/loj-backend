@@ -13,9 +13,10 @@ import java.util.List;
 
 /**
  * 默认判题策略（默认为JAVA）
+ *
  * @author L
  */
-public class DefaultJudgeStrategy implements JudgeStrategy{
+public class DefaultJudgeStrategy implements JudgeStrategy {
     @Override
     public JudgeInfo doJudge(JudgeContext judgeContext) {
         ExecuteCodeResponse executeCodeResponse = judgeContext.getExecuteCodeResponse();
@@ -70,7 +71,7 @@ public class DefaultJudgeStrategy implements JudgeStrategy{
             judgeInfo.setMessage(JudgeInfoMessageEnum.TIME_LIMIT_EXCEEDED.getValue());
             return judgeInfo;
         }
-        if (memory > judgeConfig.getMemoryLimit()) {
+        if (memory > judgeConfig.getMemoryLimit() * 1000 * 8) {
             judgeInfo.setMessage(JudgeInfoMessageEnum.MEMORY_LIMIT_EXCEEDED.getValue());
             return judgeInfo;
         }
